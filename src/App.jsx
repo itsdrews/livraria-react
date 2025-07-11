@@ -11,23 +11,32 @@ import Programacao from './components/Programacao'
 import NotFound from './components/NotFound'
 import Rodape from './components/Rodape'
 import Livro from './components/Livro'
+import Carrinho from './components/Carrinho'
 
 import { Route, Routes, useParams } from 'react-router-dom'
  
-  
-const LivroRouterHandler = ({livros}) => {
- 
-  const {livroSlug} = useParams();
-  const livro = livros.find(l => l.slug === livroSlug);
-  
-  if(!livro) return <NotFound/>;
-  return <Livro livro = {livro}/>
-}
 const App = () => {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState(null);
- 
-useEffect(() => {
+
+  const[carrinho,setCarrinho] = useState(() =>{
+    const carrinhoSalvo = localStorage.getItem('carrinho');
+    return carrinhoSalvo? JSON.parse(carrinhoSalvo): [];
+  })
+
+  useEffect(() =>{
+    localStorage.setItem('carrinho',JSON.stringify(carrinho));
+  },[carrinho]);
+
+  const adicionarLivro = (livro) => {
+    console.log("Livro adicionado!");
+    setCarrinho([...carrinho,livro]);
+  };
+
+  const removerLivro = (livro) => {
+    setCarrinho(carrinho.filter((item) => item.id !==livro.id));
+  }
+  useEffect(() => {
   const carregarLivros = async () => {
     try {
       const response = await axios.get("/api/todosOsLivros.json");
@@ -39,7 +48,15 @@ useEffect(() => {
     }
   };
   carregarLivros();
-}, []);  
+  }, []);  
+  const LivroRouterHandler = ({livros,adicionarLivro}) => {
+ 
+  const {livroSlug} = useParams();
+  const livro = livros.find(l => l.slug === livroSlug);
+  
+  if(!livro) return <NotFound/>;
+  return <Livro livro = {livro} adicionarLivro={adicionarLivro}/>
+}
 
   return (
     <>
@@ -52,8 +69,10 @@ useEffect(() => {
         <Route path='/programacao' element={<Programacao livros={livros}/>}/>
         <Route path='/design' element={<Design livros={livros}/>}/>
         <Route path='/catalogo' element={<Catalogo livros={livros}/>}/>
-        <Route path='/livro/:livroSlug' element={<LivroRouterHandler livros={livros}/>}/>
+        <Route path='/livro/:livroSlug' element={<LivroRouterHandler livros={livros} adicionarLivro= {adicionarLivro}/>}/>
         <Route path='/notfound' element={<NotFound/>}/>
+        <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
+        {carrinho} removerLivro = {removerLivro} />}/>
   
       </Routes>
       </main>

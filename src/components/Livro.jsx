@@ -2,7 +2,7 @@ import React from 'react'
 
 
 
-const Livro = ({livro}) => (
+const Livro = ({livro,adicionarLivro}) => (
   
     <main className='principal'>
         <div className="pag-livro">
@@ -18,7 +18,7 @@ const Livro = ({livro}) => (
                 </ul>
                 <h3>Descrição do livro</h3>
                 <p>{livro.descricao}</p>
-                <button >Adicionar ao Carrinho</button>
+                <button onClick={() =>adicionarLivro(livro)}>Adicionar ao Carrinho</button>
             </div>
         </div>
     </main>
