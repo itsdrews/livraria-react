@@ -9,7 +9,7 @@ const linkCorrente = ({isActive}) =>({
 
 const Navegacao = () => (
    
-    <nav aria-label='Navegação Principal'>
+    <nav className='principal'aria-label='Navegação Principal'>
         <ul style={
             {
                 listStyle:"none",

@@ -24,8 +24,6 @@ const LivroRouterHandler = ({livros}) => {
   return <Livro livro = {livro}/>
 }
 const App = () => {
- 
-
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState(null);
  
@@ -42,8 +40,7 @@ useEffect(() => {
   };
   carregarLivros();
 }, []);  
- 
-  
+
   return (
     <>
      <Topo/>
