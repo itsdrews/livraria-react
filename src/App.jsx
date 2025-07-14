@@ -14,6 +14,7 @@ import Livro from './components/Livro'
 import Carrinho from './components/Carrinho'
 
 import { Route, Routes, useParams } from 'react-router-dom'
+import Pagamento from './components/Pagamento'
  
 const App = () => {
   const [livros, setLivros] = useState([]);
@@ -73,6 +74,7 @@ const App = () => {
         <Route path='/notfound' element={<NotFound/>}/>
         <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
         {carrinho} removerLivro = {removerLivro} />}/>
+        <Route path='pagamento'element={<Pagamento total = {total}/>}/>
   
       </Routes>
       </main>

@@ -24,6 +24,49 @@ ul {
   margin: 0;
   list-style: none;
 }
+.carrinho{
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+}
+.carrinho h2 {
+  width: 50rem;
+  text-align: center;
+
+}
+.item-carrinho{
+  display: flex;
+  flex-direction: row;
+
+
+}
+.titulo-capa{
+  display: flex;
+  flex-direction: column;
+  color: #027399;
+}
+.quantidade-subtotal{
+  margin-left: auto;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+
+}
+.quantidade-subtotal p{
+  color: #027399;
+}
+.total{
+  bottom: 5rem;
+  right: 25rem;
+  display: flex;
+  font-size: 1.2rem;
+}
+.total button{
+  margin-left: auto;
+  width: 15rem;
+  height: 3rem;
+  font-weight: bold;
+}
 .logo {
   position: relative;
   padding: 2em 0;
