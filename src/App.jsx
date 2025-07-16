@@ -74,7 +74,7 @@ const App = () => {
         <Route path='/notfound' element={<NotFound/>}/>
         <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
         {carrinho} removerLivro = {removerLivro} />}/>
-        <Route path='pagamento'element={<Pagamento total = {total}/>}/>
+        
   
       </Routes>
       </main>
