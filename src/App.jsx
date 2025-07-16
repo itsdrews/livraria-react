@@ -12,10 +12,10 @@ import NotFound from './components/NotFound'
 import Rodape from './components/Rodape'
 import Livro from './components/Livro'
 import Carrinho from './components/Carrinho'
-
-import { Route, Routes, useParams } from 'react-router-dom'
 import Pagamento from './components/Pagamento'
  
+
+import { Route, Routes, useParams } from 'react-router-dom'
 const App = () => {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState(null);
@@ -26,17 +26,49 @@ const App = () => {
   })
 
   useEffect(() =>{
+    console.log("carrinho atualizado!")
     localStorage.setItem('carrinho',JSON.stringify(carrinho));
   },[carrinho]);
 
   const adicionarLivro = (livro) => {
-    console.log("Livro adicionado!");
-    setCarrinho([...carrinho,livro]);
-  };
+    setCarrinho(prevCarrinho => {
+      const itemExistente =prevCarrinho.find(item =>item.id===livro.id);
 
-  const removerLivro = (livro) => {
-    setCarrinho(carrinho.filter((item) => item.id !==livro.id));
-  }
+      if (itemExistente){
+        return prevCarrinho.map(item =>
+          item.id === livro.id
+          ? {...item,quantidade:(item.quantidade || 1)}
+          :item
+        );
+      }else{
+        return [...prevCarrinho,{...livro,quantidade:livro.quantidade|| 1}]
+      }
+    })
+      
+  };
+ // Versão corrigida - aumentando quantidade
+const aumentarQuantidade = (id) => {
+  setCarrinho(prevCarrinho => 
+    prevCarrinho.map(item =>
+      item.id === id
+        ? { ...item, quantidade: item.quantidade + 1 }
+        : item
+    )
+  );
+};
+
+// Versão corrigida - diminuindo quantidade (com remoção quando chega a zero)
+const diminuirQuantidade = (id) => {
+  setCarrinho(prevCarrinho => 
+    prevCarrinho
+      .map(item =>
+        item.id === id
+          ? { ...item, quantidade: item.quantidade - 1 }
+          : item
+      )
+      .filter(item => item.quantidade > 0)
+  );
+};
   useEffect(() => {
   const carregarLivros = async () => {
     try {
@@ -73,8 +105,8 @@ const App = () => {
         <Route path='/livro/:livroSlug' element={<LivroRouterHandler livros={livros} adicionarLivro= {adicionarLivro}/>}/>
         <Route path='/notfound' element={<NotFound/>}/>
         <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
-        {carrinho} removerLivro = {removerLivro} />}/>
-        
+        {carrinho} aumentarQuantidade={aumentarQuantidade} diminuirQuantidade= {diminuirQuantidade}/>}/>
+        <Route path = '/pagamento' element={<Pagamento carrinho={carrinho}/>}/>
   
       </Routes>
       </main>
