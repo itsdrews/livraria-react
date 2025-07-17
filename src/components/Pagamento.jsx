@@ -3,9 +3,9 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
 
 const METODOS_PAGAMENTO = [
-  { id: 'pix', nome: 'PIX', icone: '💰' },
-  { id: 'debito', nome: 'Débito', icone: '💳' },
-  { id: 'credito', nome: 'Crédito', icone: '🛒' }
+  { id: 'pix', nome: 'PIX' },
+  { id: 'debito', nome: 'Débito'},
+  { id: 'credito', nome: 'Crédito' }
 ];
 
 const Pagamento = () => {

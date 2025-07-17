@@ -9,7 +9,8 @@ html {
 }
 body {
   margin: 0;
-  font: 1rem sans-serif;
+  font: 1rem 'Open Sans';
+  height: 100vh;
 }
 h1,
 h2,
@@ -69,15 +70,6 @@ ul {
   height: 3rem;
   font-weight: bold;
 }
-.logo {
-  position: relative;
-  padding: 2em 0;
-  background: url(/imagens/logo.png) center no-repeat;
-}
-.logo span {
-  position: absolute;
-  top: -20000px;
-} 
 .topo h1 {
   width: 200px;
   height: 50px;
@@ -117,11 +109,19 @@ ul {
   display: block;
   width: 80px;
 }
-.topo,
+.topo{
+  text-align: center;
+  background: #ffffff;
+  padding: 1px 0;
+  width: 100%;
+}
 .rodape {
   text-align: center;
-  background: #eaefef;
+  background: #027399;
   padding: 1px 0;
+  width: 100%;
+  position:fixed;
+  bottom: 0;
 }
 .topo {
   margin-bottom: 2px;
@@ -210,7 +210,8 @@ ul {
   max-width: 800px;
   margin: 0 auto;
   padding: 2rem;
-  font-family: 'Segoe UI', sans-serif;
+  font-family: 'Open Sans',sans-serif;
+  color: #013a4d;
 }
 
 .resumo-pedido {
@@ -246,7 +247,7 @@ ul {
 }
 
 .metodo-btn {
-  background: white;
+  background:#027399;
   border: 2px solid #e0e0e0;
   border-radius: 8px;
   padding: 1rem;
@@ -255,11 +256,12 @@ ul {
   align-items: center;
   cursor: pointer;
   transition: all 0.2s;
+  color: #ffffff;
 }
 
 .metodo-btn.ativo {
   border-color: #013a4d;
-  background: #f0fff4;
+  background: #013a4d;
 }
 
 .icone {
