@@ -1,9 +1,49 @@
 import React from 'react'
+import {toast } from 'react-toastify';
 
 
 
-const Livro = ({livro,adicionarLivro}) => (
-  
+
+
+
+const Livro = ({livro,adicionarLivro}) => {
+    const mostrarToast = () => {
+        if(livro.estoque>1){ toast.success("Livro adicionado com sucesso", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,   
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+        return true;
+
+        }else{
+          toast.error("Perdão, não há mais exemplares em estoque!",{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,   
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          
+        })
+        return false;
+        }
+       
+      }
+   
+      const handleAdicionar= () =>{
+       
+        if(mostrarToast()){adicionarLivro(livro)};
+        ;
+          
+      }
+  return(
+
+
     <main className='principal'>
         <div className="pag-livro">
             <h2>{livro.titulo}</h2>
@@ -18,12 +58,14 @@ const Livro = ({livro,adicionarLivro}) => (
                 </ul>
                 <h3>Descrição do livro</h3>
                 <p>{livro.descricao}</p>
-                <button onClick={() =>adicionarLivro(livro)}>Adicionar ao Carrinho</button>
+                <div>
+                <button onClick={() =>handleAdicionar()}>Adicionar ao Carrinho</button>
+                </div>
             </div>
         </div>
     </main>
 
 )
-
+}
 export default Livro;
 

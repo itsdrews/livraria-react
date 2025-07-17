@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { QRCodeSVG } from 'qrcode.react';
+import {toast } from 'react-toastify';
+
 
 const METODOS_PAGAMENTO = [
   { id: 'pix', nome: 'PIX' },
@@ -8,19 +10,30 @@ const METODOS_PAGAMENTO = [
   { id: 'credito', nome: 'Crédito' }
 ];
 
+ const mostrarToast = () => {
+        toast.success('Operação realizada com sucesso!', {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,   
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        });
+      }
 const Pagamento = () => {
   const { state } = useLocation();
   const { total, itens } = state || {};
   const navigate = useNavigate();
   
-  // Estados
+
   const [metodoSelecionado, setMetodoSelecionado] = useState('pix');
   const [qrCodePix, setQrCodePix] = useState('');
   const [dadosCartao, setDadosCartao] = useState({
     numero: '', nome: '', validade: '', cvv: '', parcelas: 1
   });
 
-  // Gera QR Code PIX (simulado)
+  
   useEffect(() => {
     if (metodoSelecionado === 'pix' && total) {
       setQrCodePix(`00020126580014BR.GOV.BCB.PIX0136...VALOR=${total}...`);
@@ -29,7 +42,7 @@ const Pagamento = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Simula processamento
+
     setTimeout(() => {
       navigate('/confirmacao', { 
         state: { total, metodo: metodoSelecionado } 
@@ -46,7 +59,6 @@ const Pagamento = () => {
     <div className="pagamento-container">
       <h1>Finalizar Compra</h1>
       
-      {/* Resumo do Pedido */}
       <div className="resumo-pedido">
         <h3>Seu Pedido</h3>
         <ul>
@@ -62,7 +74,7 @@ const Pagamento = () => {
         </div>
       </div>
 
-      {/* Seleção de Método */}
+   
       <div className="selecao-metodo">
         <h3>Método de Pagamento</h3>
         <div className="botoes-metodo">
@@ -80,7 +92,7 @@ const Pagamento = () => {
         </div>
       </div>
 
-      {/* Formulários Dinâmicos */}
+ 
       <div className="formulario-pagamento">
         {metodoSelecionado === 'pix' ? (
           <div className="pix-content">
@@ -114,7 +126,6 @@ const Pagamento = () => {
               />
             </div>
 
-            {/* Campos adicionais para crédito/débito... */}
 
             {metodoSelecionado === 'credito' && (
               <div className="input-group">
@@ -137,7 +148,7 @@ const Pagamento = () => {
               </div>
             )}
 
-            <button type="submit" className="botao-confirmar">
+            <button onClick={mostrarToast()}type="submit" className="botao-confirmar">
               Confirmar Pagamento
             </button>
           </form>

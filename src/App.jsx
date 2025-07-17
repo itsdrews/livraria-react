@@ -13,28 +13,63 @@ import Rodape from './components/Rodape'
 import Livro from './components/Livro'
 import Carrinho from './components/Carrinho'
 import Pagamento from './components/Pagamento'
- 
-
 import { Route, Routes, useParams } from 'react-router-dom'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
+
 const App = () => {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState(null);
+  const [controleEstoque,setControleEstoque]= useState([]);
 
   const[carrinho,setCarrinho] = useState(() =>{
     const carrinhoSalvo = localStorage.getItem('carrinho');
     return carrinhoSalvo? JSON.parse(carrinhoSalvo): [];
   })
-
+  useEffect(() => {
+  const carregarLivros = async () => {
+    try {
+      const response = await axios.get("/api/todosOsLivros.json");
+      const arrayModificado = response.data.map(item =>{
+        return{
+          ...item,
+          estoque:Math.floor(Math.random()*10) +1
+        };
+      });
+      setLivros(arrayModificado);
+      setControleEstoque( arrayModificado.map(({id,estoque}) =>({id,estoque})))
+      console.log("Livros carregados!");
+    } catch (error) {
+      console.error("Erro ao carregar livros: ", error);
+      setErro("Falha ao carregar os livros. Tente novamente mais tarde!");
+    }
+  };
+  carregarLivros();
+  
+  }, []);  
+  console.log(controleEstoque)
+ 
   useEffect(() =>{
-    console.log("carrinho atualizado!")
     localStorage.setItem('carrinho',JSON.stringify(carrinho));
   },[carrinho]);
 
   const adicionarLivro = (livro) => {
+    setControleEstoque(prevEstoque => {
+      const estoqueAtualizado = prevEstoque.map(item => {
+        if(item.id===idLivro){
+          if(item.estoque<1){
+            setErro(`Estoque insuficiente para o livro ${idLivro}`)
+            return item
+          }
+        }
+      })
+    })
+    
     setCarrinho(prevCarrinho => {
       const itemExistente =prevCarrinho.find(item =>item.id===livro.id);
-
       if (itemExistente){
+        setControleEtoque()
         return prevCarrinho.map(item =>
           item.id === livro.id
           ? {...item,quantidade:(item.quantidade || 1)}
@@ -43,11 +78,18 @@ const App = () => {
       }else{
         return [...prevCarrinho,{...livro,quantidade:livro.quantidade|| 1}]
       }
+      
     })
+   
       
   };
- // Versão corrigida - aumentando quantidade
+
 const aumentarQuantidade = (id) => {
+  const itemEstoque = controleEstoque.find(item => item.id===livro.id)
+
+    if (!itemEstoque.estoque<=0){
+        return
+    }
   setCarrinho(prevCarrinho => 
     prevCarrinho.map(item =>
       item.id === id
@@ -55,10 +97,13 @@ const aumentarQuantidade = (id) => {
         : item
     )
   );
+   setControleEstoque(prevEstoque => prevEstoque.map(item => item.id ===livro.id?
+       {...item,estoque: item.estoque -1}:item))
+  console.log("nova quantidade: ",item.estoque)
 };
 
-// Versão corrigida - diminuindo quantidade (com remoção quando chega a zero)
 const diminuirQuantidade = (id) => {
+  const itemEstoque = controleEstoque.find(item => item.id===livro.id)
   setCarrinho(prevCarrinho => 
     prevCarrinho
       .map(item =>
@@ -68,20 +113,12 @@ const diminuirQuantidade = (id) => {
       )
       .filter(item => item.quantidade > 0)
   );
+  setControleEStoque(prevEstoque => prevEstoque.map(item => item.id ===livro.id?
+       {...item,estoque: item.estoque +1}:item))
+  console.log("nova quantidade: ",item.estoque)
+
 };
-  useEffect(() => {
-  const carregarLivros = async () => {
-    try {
-      const response = await axios.get("/api/todosOsLivros.json");
-      setLivros(response.data);
-      console.log("Livros carregados!");
-    } catch (error) {
-      console.error("Erro ao carregar livros: ", error);
-      setErro("Falha ao carregar os livros. Tente novamente mais tarde!");
-    }
-  };
-  carregarLivros();
-  }, []);  
+  
   const LivroRouterHandler = ({livros,adicionarLivro}) => {
  
   const {livroSlug} = useParams();
@@ -95,6 +132,7 @@ const diminuirQuantidade = (id) => {
     <>
      <Topo/>
       <main className="principal">
+        <ToastContainer/>
         {erro && <p className='erro'>{erro}</p>}
       <Routes>
         <Route path='/' element={<Home livros={livros}/>}/>
@@ -102,13 +140,14 @@ const diminuirQuantidade = (id) => {
         <Route path='/programacao' element={<Programacao livros={livros}/>}/>
         <Route path='/design' element={<Design livros={livros}/>}/>
         <Route path='/catalogo' element={<Catalogo livros={livros}/>}/>
-        <Route path='/livro/:livroSlug' element={<LivroRouterHandler livros={livros} adicionarLivro= {adicionarLivro}/>}/>
+        <Route path='/livro/:livroSlug' element={<LivroRouterHandler livros={livros} adicionarLivro= {adicionarLivro} />}/>
         <Route path='/notfound' element={<NotFound/>}/>
         <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
         {carrinho} aumentarQuantidade={aumentarQuantidade} diminuirQuantidade= {diminuirQuantidade}/>}/>
         <Route path = '/pagamento' element={<Pagamento carrinho={carrinho}/>}/>
-  
+
       </Routes>
+  
       </main>
       <Rodape/>
     </>

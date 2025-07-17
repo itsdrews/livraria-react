@@ -3,6 +3,8 @@ import React from 'react'
 import { NavLink,useNavigate } from 'react-router-dom';
 
 const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
+
+    
     const navigate = useNavigate();
     const total = itens.reduce((soma, item) => {
     const livro = livros.find(l => l.id === item.id);
