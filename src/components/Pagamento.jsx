@@ -11,15 +11,7 @@ const METODOS_PAGAMENTO = [
 ];
 
  const mostrarToast = () => {
-        toast.success('Operação realizada com sucesso!', {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,   
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        });
+        toast.success('Operação realizada com sucesso!');
       }
 const Pagamento = () => {
   const { state } = useLocation();
@@ -49,7 +41,9 @@ const Pagamento = () => {
       });
     }, 1500);
   };
-
+  const handleConfirmacao = () =>{
+    mostrarToast();
+  }
   if (!total) {
     navigate('/carrinho');
     return null;
@@ -85,7 +79,6 @@ const Pagamento = () => {
               onClick={() => setMetodoSelecionado(metodo.id)}
               type="button"
             >
-              <span className="icone">{metodo.icone}</span>
               {metodo.nome}
             </button>
           ))}
@@ -148,7 +141,7 @@ const Pagamento = () => {
               </div>
             )}
 
-            <button onClick={mostrarToast()}type="submit" className="botao-confirmar">
+            <button onClick={() =>{handleConfirmacao()}}type="submit" className="botao-confirmar">
               Confirmar Pagamento
             </button>
           </form>

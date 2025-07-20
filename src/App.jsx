@@ -15,6 +15,7 @@ import Carrinho from './components/Carrinho'
 import Pagamento from './components/Pagamento'
 import { Route, Routes, useParams } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify';
+import Confirmacao from './components/Confirmacao'
 import 'react-toastify/dist/ReactToastify.css';
 
 
@@ -138,6 +139,7 @@ const diminuirQuantidade = (livro) => {
         <Route path='/carrinho' element = {<Carrinho livros = {livros} itens = 
         {carrinho} aumentarQuantidade={aumentarQuantidade} diminuirQuantidade= {diminuirQuantidade}/>}/>
         <Route path = '/pagamento' element={<Pagamento carrinho={carrinho}/>}/>
+        <Route path = '/confirmacao' element={<Confirmacao/>}/>
 
       </Routes>
   
