@@ -79,21 +79,19 @@ ul {
   background: #c8e0e8;
   border-bottom: 1px solid #cacaca;
   width: 100%;
-  text-align: center;
-  margin: 0 auto;
 
 }
 .topo li {
   display: inline-block;
   border-right: 1px solid #999;
-}
-.topo li {
   text-transform: uppercase;
   font-weight: bold;
-  color: #000;
-  text-decoration: none;
   display: block;
-  padding: 8px 20px;
+  padding: 8px 20px; 
+  font-weight: bold;
+  color: #000000;
+  text-decoration: none;
+  width: 100%;
 }
 .topo li:hover {
   color: #666;
@@ -131,7 +129,7 @@ ul {
   flex-wrap: wrap;
   justify-content: space-between;
   background: #eaefef;
-  max-width: 900px;
+  max-width: 100%;
   margin: 0 auto;
 }
 .principal h2 {
@@ -192,6 +190,7 @@ ul {
   align-items: center;
   align-content: space-between;
   gap: 36rem;
+
 }
 
 .payment{
@@ -200,6 +199,8 @@ ul {
   color: #ffffff;
   border: none;
   font-size: 1.2rem;
+  width: 10rem;
+  height: 4rem;
 }
 .payment:hover{
   background-color: #013a4d;

@@ -1,6 +1,7 @@
 
 import React from 'react'
 import { NavLink,useNavigate } from 'react-router-dom';
+import {toast,ToastContainer} from 'react-toast'
 
 const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
 
@@ -15,7 +16,17 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
         const livroInfo = livros.find(livro => livro.id===item.id);
         return {...item,...livroInfo};
     })
-
+    const mostrarToast = (msg) =>{
+        toast.error(msg,{
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,   
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+        })
+    }
     const handlePayment = () => {
         if(itens.length>0){
             navigate('/pagamento',{
@@ -24,8 +35,14 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
                 }
             });
         }else{
-            alert('Carrinho vazio!')
+            mostrarToast('Não há itens a serem pagos!');
         }
+    }
+    const handleAumentar = (livro) =>{
+        if(livro.estoque <=0){
+            mostrarToast('Não há mais exemplares disponíveis!');
+        }
+        aumentarQuantidade(livro);
     }
    
     return(
@@ -39,9 +56,9 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
                 </div>
                 <div className="quantidade-subtotal">
                     <p>Preço unitário: R$ {Number(item.preco).toFixed(2)}</p>
-                    <button className='quantidade-botao' onClick={() => aumentarQuantidade(item.id)}>+</button>
+                    <button className='quantidade-botao' onClick={() => handleAumentar(item)}>+</button>
                     <span style={{ margin: "0 auto" }}>{item.quantidade}</span>
-                    <button className ='quantidade-botao'onClick={() => diminuirQuantidade(item.id)}>-</button>
+                    <button className ='quantidade-botao'onClick={() => diminuirQuantidade(item)}>-</button>
                     
                     
                 </div>
@@ -51,7 +68,7 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
             <div className='total-pay'>
                  <p className='total'>Total: R$ {total.toFixed(2)}</p>
                 <button className='payment' onClick={handlePayment}>Finalizar Compra</button>
-              
+                <ToastContainer/>
             </div>
             </div>
 

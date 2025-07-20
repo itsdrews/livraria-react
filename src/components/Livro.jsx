@@ -41,6 +41,7 @@ const Livro = ({livro,adicionarLivro}) => {
         ;
           
       }
+      
   return(
 
 
@@ -59,7 +60,7 @@ const Livro = ({livro,adicionarLivro}) => {
                 <h3>Descrição do livro</h3>
                 <p>{livro.descricao}</p>
                 <div>
-                <button onClick={() =>handleAdicionar()}>Adicionar ao Carrinho</button>
+                <button className='payment' onClick={() =>handleAdicionar()}>Adicionar ao Carrinho</button>
                 </div>
             </div>
         </div>

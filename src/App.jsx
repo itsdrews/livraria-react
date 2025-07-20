@@ -21,24 +21,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
   const [livros, setLivros] = useState([]);
   const [erro, setErro] = useState(null);
-  const [controleEstoque,setControleEstoque]= useState([]);
-
   const[carrinho,setCarrinho] = useState(() =>{
     const carrinhoSalvo = localStorage.getItem('carrinho');
     return carrinhoSalvo? JSON.parse(carrinhoSalvo): [];
   })
+
+  
   useEffect(() => {
   const carregarLivros = async () => {
     try {
       const response = await axios.get("/api/todosOsLivros.json");
-      const arrayModificado = response.data.map(item =>{
-        return{
-          ...item,
-          estoque:Math.floor(Math.random()*10) +1
-        };
-      });
-      setLivros(arrayModificado);
-      setControleEstoque( arrayModificado.map(({id,estoque}) =>({id,estoque})))
+      const livrosComEstoque = response.data.map(livro =>({
+        ...livro,
+        estoque: Math.floor(Math.random()*10)+1  }))
+      setLivros(livrosComEstoque);
       console.log("Livros carregados!");
     } catch (error) {
       console.error("Erro ao carregar livros: ", error);
@@ -47,29 +43,23 @@ const App = () => {
   };
   carregarLivros();
   
-  }, []);  
-  console.log(controleEstoque)
- 
+  }, []);
   useEffect(() =>{
     localStorage.setItem('carrinho',JSON.stringify(carrinho));
   },[carrinho]);
-
-  const adicionarLivro = (livro) => {
-    setControleEstoque(prevEstoque => {
-      const estoqueAtualizado = prevEstoque.map(item => {
-        if(item.id===idLivro){
-          if(item.estoque<1){
-            setErro(`Estoque insuficiente para o livro ${idLivro}`)
-            return item
-          }
-        }
-      })
-    })
+  const atualizarEstoque = (id,novoEstoque) =>{ 
+    setLivros(livros.map(livro=>
+      livro.id===id?{...livro,estoque:novoEstoque}:livro));
     
-    setCarrinho(prevCarrinho => {
+    }
+  const adicionarLivro = (livro) => {
+    if (livro.estoque<=0){
+      return;
+    }else{
+       setCarrinho(prevCarrinho => {
       const itemExistente =prevCarrinho.find(item =>item.id===livro.id);
       if (itemExistente){
-        setControleEtoque()
+        atualizarEstoque(livro.id,livro.estoque-1);
         return prevCarrinho.map(item =>
           item.id === livro.id
           ? {...item,quantidade:(item.quantidade || 1)}
@@ -81,42 +71,40 @@ const App = () => {
       
     })
    
+    }
+   
       
   };
 
-const aumentarQuantidade = (id) => {
-  const itemEstoque = controleEstoque.find(item => item.id===livro.id)
-
-    if (!itemEstoque.estoque<=0){
-        return
-    }
-  setCarrinho(prevCarrinho => 
+const aumentarQuantidade = (livro) => {
+  if(livro.estoque<=0){
+    console.log("estoque 0")
+    return;
+  }else{
+    setCarrinho(prevCarrinho => 
     prevCarrinho.map(item =>
-      item.id === id
-        ? { ...item, quantidade: item.quantidade + 1 }
-        : item
+      item.id === livro.id
+      ? { ...item, quantidade: item.quantidade + 1 }
+      : item
     )
   );
-   setControleEstoque(prevEstoque => prevEstoque.map(item => item.id ===livro.id?
-       {...item,estoque: item.estoque -1}:item))
-  console.log("nova quantidade: ",item.estoque)
+  atualizarEstoque(livro.id,livro.estoque-1)
+
+  }
+  
 };
 
-const diminuirQuantidade = (id) => {
-  const itemEstoque = controleEstoque.find(item => item.id===livro.id)
+const diminuirQuantidade = (livro) => {
   setCarrinho(prevCarrinho => 
     prevCarrinho
       .map(item =>
-        item.id === id
+        item.id === livro.id
           ? { ...item, quantidade: item.quantidade - 1 }
           : item
       )
       .filter(item => item.quantidade > 0)
   );
-  setControleEStoque(prevEstoque => prevEstoque.map(item => item.id ===livro.id?
-       {...item,estoque: item.estoque +1}:item))
-  console.log("nova quantidade: ",item.estoque)
-
+  atualizarEstoque(livro.id,livro.estoque+1)
 };
   
   const LivroRouterHandler = ({livros,adicionarLivro}) => {
