@@ -8,28 +8,11 @@ import {toast } from 'react-toastify';
 
 const Livro = ({livro,adicionarLivro}) => {
     const mostrarToast = () => {
-        if(livro.estoque>1){ toast.success("Livro adicionado com sucesso", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,   
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        if(livro.estoque>1){ toast.success("Livro adicionado com sucesso!");
         return true;
 
         }else{
-          toast.error("Perdão, não há mais exemplares em estoque!",{
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,   
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          
-        })
+          toast.error("Perdão, não há mais exemplares em estoque!");
         return false;
         }
        

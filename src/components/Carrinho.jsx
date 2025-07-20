@@ -17,15 +17,7 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
         return {...item,...livroInfo};
     })
     const mostrarToast = (msg) =>{
-        toast.error(msg,{
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,   
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-        })
+        toast.error(msg)
     }
     const handlePayment = () => {
         if(itens.length>0){
@@ -47,6 +39,12 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
    
     return(
         <div className="carrinho">
+            <ToastContainer   position="top-right"
+              autoClose={5000}
+              newestOnTop
+              closeOnClick
+              pauseOnHover
+  />
             <h2>Seu Carrinho</h2>
           {itensComDetalhes.map(item => (
             <div key={item.id} className='item-carrinho'>
@@ -68,7 +66,6 @@ const Carrinho = ({itens,aumentarQuantidade,diminuirQuantidade,livros}) => {
             <div className='total-pay'>
                  <p className='total'>Total: R$ {total.toFixed(2)}</p>
                 <button className='payment' onClick={handlePayment}>Finalizar Compra</button>
-                <ToastContainer/>
             </div>
             </div>
 

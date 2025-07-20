@@ -120,7 +120,12 @@ const diminuirQuantidade = (livro) => {
     <>
      <Topo/>
       <main className="principal">
-        <ToastContainer/>
+        <ToastContainer   position="top-right"
+              autoClose={5000}
+              newestOnTop
+              closeOnClick
+              pauseOnHover
+  />
         {erro && <p className='erro'>{erro}</p>}
       <Routes>
         <Route path='/' element={<Home livros={livros}/>}/>
